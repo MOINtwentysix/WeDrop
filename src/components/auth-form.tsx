@@ -1,0 +1,86 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight, LockKeyhole } from "lucide-react";
+import { api } from "@/lib/client";
+export function AuthForm({ register = false }: { register?: boolean }) {
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  return (
+    <section className="narrow">
+      <span className="eyebrow">A LITTLE MORE WEDROP</span>
+      <h1>{register ? "Make room for more." : "Welcome back."}</h1>
+      <p className="intro">
+        {register
+          ? "Longer expirations. Bigger ideas. All your drops in one place."
+          : "Your little corner of the internet is waiting."}
+      </p>
+      <form
+        className="form-card"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setBusy(true);
+          setError("");
+          const form = new FormData(e.currentTarget);
+          try {
+            await api(`/api/auth/${register ? "register" : "login"}`, {
+              method: "POST",
+              body: JSON.stringify({
+                email: form.get("email"),
+                password: form.get("password"),
+              }),
+            });
+            window.location.assign("/my-drops");
+          } catch (e) {
+            setError((e as Error).message);
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        <label>
+          Email address
+          <input
+            type="email"
+            name="email"
+            autoComplete="email"
+            maxLength={254}
+            required
+            placeholder="you@example.com"
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            name="password"
+            autoComplete={register ? "new-password" : "current-password"}
+            minLength={12}
+            maxLength={128}
+            required
+            placeholder="At least 12 characters"
+          />
+        </label>
+        {error && (
+          <p role="alert" className="error">
+            {error}
+          </p>
+        )}
+        <button className="primary" disabled={busy}>
+          {busy ? "Please wait…" : register ? "Create account" : "Sign in"}
+          <ArrowUpRight size={17} />
+        </button>
+        <p className="small subtle">
+          <LockKeyhole size={13} />
+          Your password is securely hashed.
+        </p>
+      </form>
+      <p className="center subtle">
+        {register ? "Already have an account?" : "New around here?"}{" "}
+        <Link href={register ? "/login" : "/register"}>
+          {register ? "Sign in" : "Create an account"}
+        </Link>
+      </p>
+    </section>
+  );
+}
