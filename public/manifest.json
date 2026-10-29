@@ -32,13 +32,13 @@
   "shortcuts": [
     {
       "name": "New drop",
-      "url": "/",
+      "url": "/create",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     { "name": "My Drops", "url": "/my-drops" }
   ],
   "share_target": {
-    "action": "/",
+    "action": "/create",
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": { "title": "title", "text": "text", "url": "url" }

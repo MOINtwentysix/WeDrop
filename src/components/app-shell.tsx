@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, createContext, useContext } from "react";
 import {
   ArrowDown,
@@ -7,22 +8,30 @@ import {
   Github,
   LogOut,
   Download,
+  User as UserIcon,
 } from "lucide-react";
 import { api } from "@/lib/client";
-type User = { id: string; email: string };
+
+type User = { id: string; email: string; username?: string | null };
 type InstallPrompt = Event & { prompt: () => Promise<void> };
+
 const Auth = createContext<{
   user: User | null;
   loading: boolean;
   refresh: () => Promise<void>;
 }>({ user: null, loading: true, refresh: async () => {} });
+
 export const useAuth = () => useContext(Auth);
+
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isEditor = pathname === "/create" || pathname === "/editor";
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [install, setInstall] = useState<InstallPrompt | null>(null);
   const [online, setOnline] = useState(true);
   const [error, setError] = useState("");
+
   async function refresh() {
     try {
       setUser((await api("/api/auth/me")).user);
@@ -30,6 +39,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     refresh().catch(() => {});
     if ("serviceWorker" in navigator)
@@ -49,9 +59,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       window.removeEventListener("offline", network);
     };
   }, []);
+
   return (
     <Auth.Provider value={{ user, loading, refresh }}>
-      <div className="site">
+      <div className={`site${isEditor ? " site-editor" : ""}`}>
         <header className="header">
           <Link href="/" className="brand" aria-label="WeDrop home">
             <span className="brand-icon">
@@ -60,7 +71,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             WeDrop<span className="beta">BETA</span>
           </Link>
           <nav aria-label="Main navigation">
+            <Link href="/create">Create Drop</Link>
             <Link href="/my-drops">My Drops</Link>
+            {user && (
+              <Link href="/account" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                <UserIcon size={14} />
+                {user.username ? `@${user.username}` : "Account"}
+              </Link>
+            )}
             {install && (
               <button
                 className="nav-button"
@@ -109,7 +127,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         )}
         <main>{children}</main>
         <footer>
-          <span>Little things. Shared simply.</span>
+          <span>Drop it. Share it.</span>
           <div>
             <span className="status-dot" />
             All text. No attachments.

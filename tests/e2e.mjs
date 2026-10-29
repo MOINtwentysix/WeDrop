@@ -1,6 +1,7 @@
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
+
 const origin = "http://localhost:3000";
 const browser = await chromium.launch();
 const context = await browser.newContext({
@@ -10,6 +11,7 @@ const page = await context.newPage();
 page.setDefaultTimeout(15000);
 const errors = [];
 page.on("pageerror", (error) => errors.push(error.message));
+
 async function request(path, method = "GET", data, cookie) {
   const response = await fetch(origin + path, {
     method,
@@ -26,8 +28,9 @@ async function request(path, method = "GET", data, cookie) {
     cookie: response.headers.get("set-cookie")?.split(";")[0],
   };
 }
+
 try {
-  await page.goto(origin);
+  await page.goto(origin + "/create");
   await page
     .getByRole("button", { name: "Create drop", exact: true })
     .waitFor();
@@ -49,6 +52,7 @@ try {
   console.log(
     "PASS guest UI → API → Postgres → literal recipient text + clipboard",
   );
+
   const protectedDrop = await request("/api/drops", "POST", {
     content: "one-time secret",
     expiration: "burn",
@@ -79,6 +83,7 @@ try {
   console.log(
     "PASS protected burn, wrong password, non-consuming GET, concurrent one-time reveal, expired UI",
   );
+
   const gated = await request("/api/drops", "POST", {
     content: "a protected UI drop",
     expiration: "burn",
@@ -97,6 +102,7 @@ try {
   console.log(
     "PASS password prompt, burn warning, incorrect password retry and reveal UI",
   );
+
   assert.equal(
     (await request("/api/drops", "POST", { content: "x", expiration: "7d" }))
       .status,
@@ -111,7 +117,8 @@ try {
     ).status,
     400,
   );
-  await page.goto(origin);
+
+  await page.goto(origin + "/create");
   await page.getByLabel("Deletion mode").selectOption("views");
   await page.getByLabel("Maximum opens").fill("3");
   await page.getByLabel("Your text or code").fill("three successful opens");
@@ -156,6 +163,7 @@ try {
   console.log(
     "PASS configurable opens UI, metadata does not count, exactly three concurrent reveals, final deletion and invalid limit",
   );
+
   const csrf = await fetch(origin + "/api/drops", {
     method: "POST",
     headers: {
@@ -165,11 +173,13 @@ try {
     body: "{}",
   });
   assert.equal(csrf.status, 403);
+
   await page.goto(origin + "/register");
   await page.getByLabel("Email address").fill(`ui-${Date.now()}@example.com`);
   await page
     .getByLabel("Password", { exact: true })
     .fill("a-long-test-password");
+  await page.locator('input[type="checkbox"][name="terms"]').check();
   await page
     .getByRole("button", { name: "Create account", exact: true })
     .click();
@@ -214,6 +224,7 @@ try {
   console.log(
     "PASS registration, authenticated premium creation, My Drops, QR re-view, owner revoke",
   );
+
   const account = await request("/api/auth/register", "POST", {
     email: `api-${Date.now()}@example.com`,
     password: "a-long-test-password",
@@ -274,10 +285,12 @@ try {
   console.log(
     "PASS 200k account limit, ownership isolation, expiry enforcement, authenticated cron cleanup",
   );
+
   await page.goto(
     origin +
       "/?title=Shared%20title&text=Shared%20text&url=https%3A%2F%2Fexample.com",
   );
+  await page.waitForURL((url) => url.pathname === "/create");
   assert.match(
     await page.getByLabel("Your text or code").inputValue(),
     /Shared title\n\nShared text/,
@@ -291,6 +304,7 @@ try {
   assert.equal(manifest.share_target.params.text, "text");
   for (const icon of manifest.icons)
     assert.equal((await fetch(origin + icon.src)).status, 200);
+
   await mkdir("test-results", { recursive: true });
   await page.screenshot({ path: "test-results/desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -301,6 +315,7 @@ try {
     ),
     true,
   );
+
   await context.setOffline(true);
   await page.goto(origin);
   await page.getByRole("heading", { name: "A little offline." }).waitFor();
@@ -309,6 +324,7 @@ try {
   console.log(
     "PASS text share target, PWA manifest/icons, mobile overflow, offline editor shell",
   );
+
   const keys = await page.evaluate(async () => {
     const result = [];
     for (const name of await caches.keys())
@@ -323,6 +339,7 @@ try {
         !new URL(url).pathname.startsWith("/d/"),
     ),
   );
+
   const login = await request("/api/auth/login", "POST", {
     email: `api-missing@example.com`,
     password: "a-long-test-password",
@@ -334,12 +351,14 @@ try {
   });
   assert.equal(validLogin.status, 200);
   assert.ok(validLogin.cookie);
+
   await page.goto(origin + "/my-drops");
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await page.getByRole("link", { name: "Sign in", exact: true }).waitFor();
   console.log(
     "PASS sensitive responses excluded from offline cache, invalid login and logout",
   );
+
   assert.deepEqual(errors, []);
   console.log("PASS no browser runtime errors");
 } catch (error) {

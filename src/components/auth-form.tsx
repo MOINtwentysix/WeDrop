@@ -1,11 +1,14 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import { api } from "@/lib/client";
+
 export function AuthForm({ register = false }: { register?: boolean }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+
   return (
     <section className="narrow">
       <span className="eyebrow">A LITTLE MORE WEDROP</span>
@@ -22,12 +25,24 @@ export function AuthForm({ register = false }: { register?: boolean }) {
           setBusy(true);
           setError("");
           const form = new FormData(e.currentTarget);
+          const email = form.get("email");
+          const password = form.get("password");
+          const username = form.get("username");
+          const terms = form.get("terms");
+
+          if (register && !terms) {
+            setError("Please agree to the Privacy Policy and Terms of Service.");
+            setBusy(false);
+            return;
+          }
+
           try {
             await api(`/api/auth/${register ? "register" : "login"}`, {
               method: "POST",
               body: JSON.stringify({
-                email: form.get("email"),
-                password: form.get("password"),
+                email,
+                password,
+                ...(register && username ? { username } : {}),
               }),
             });
             window.location.assign("/my-drops");
@@ -38,6 +53,21 @@ export function AuthForm({ register = false }: { register?: boolean }) {
           }
         }}
       >
+        {register && (
+          <label>
+            Username (optional)
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              minLength={3}
+              maxLength={30}
+              placeholder="e.g. wedrop_user"
+              pattern="^[a-zA-Z0-9_-]+$"
+              title="Letters, numbers, underscores, and hyphens only."
+            />
+          </label>
+        )}
         <label>
           Email address
           <input
@@ -61,6 +91,32 @@ export function AuthForm({ register = false }: { register?: boolean }) {
             placeholder="At least 12 characters"
           />
         </label>
+        {register && (
+          <label className="terms-label">
+            <input type="checkbox" name="terms" required />
+            <span>
+              I agree to the{" "}
+              <a
+                href="https://moin26.dev/rechtliches/datenschutz/wedrop/"
+                target="_blank"
+                rel="noreferrer"
+                title="Datenschutzerklärung"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://moin26.dev/rechtliches/nutzungsbedingungen/wedrop/"
+                target="_blank"
+                rel="noreferrer"
+                title="Nutzungsbedingungen"
+              >
+                Terms of Service
+              </a>
+              .
+            </span>
+          </label>
+        )}
         {error && (
           <p role="alert" className="error">
             {error}
