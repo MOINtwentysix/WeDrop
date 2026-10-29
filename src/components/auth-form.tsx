@@ -28,6 +28,13 @@ export function AuthForm({ register = false }: { register?: boolean }) {
           const email = form.get("email");
           const password = form.get("password");
           const username = form.get("username");
+          const terms = form.get("terms");
+
+          if (register && !terms) {
+            setError("Please agree to the Privacy Policy and Terms of Service.");
+            setBusy(false);
+            return;
+          }
 
           try {
             await api(`/api/auth/${register ? "register" : "login"}`, {
@@ -84,6 +91,32 @@ export function AuthForm({ register = false }: { register?: boolean }) {
             placeholder="At least 12 characters"
           />
         </label>
+        {register && (
+          <label className="terms-label">
+            <input type="checkbox" name="terms" required />
+            <span>
+              I agree to the{" "}
+              <a
+                href="https://moin26.dev/rechtliches/datenschutz/wedrop/"
+                target="_blank"
+                rel="noreferrer"
+                title="Datenschutzerklärung"
+              >
+                Privacy Policy
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://moin26.dev/rechtliches/nutzungsbedingungen/wedrop/"
+                target="_blank"
+                rel="noreferrer"
+                title="Nutzungsbedingungen"
+              >
+                Terms of Service
+              </a>
+              .
+            </span>
+          </label>
+        )}
         {error && (
           <p role="alert" className="error">
             {error}

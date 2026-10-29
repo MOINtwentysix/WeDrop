@@ -179,6 +179,7 @@ try {
   await page
     .getByLabel("Password", { exact: true })
     .fill("a-long-test-password");
+  await page.locator('input[type="checkbox"][name="terms"]').check();
   await page
     .getByRole("button", { name: "Create account", exact: true })
     .click();
