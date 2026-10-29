@@ -130,7 +130,6 @@ export function Editor() {
             <Code2 size={16} />
             Your next little drop
           </span>
-          <span className="plain-badge">PLAIN TEXT / CODE</span>
         </div>
 
         <form
