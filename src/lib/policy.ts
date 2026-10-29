@@ -1,5 +1,7 @@
 import { z } from "zod";
+
 export const expirations = ["burn", "30m", "1h", "24h", "48h", "7d"] as const;
+
 export const dropSchema = z
   .object({
     content: z.string().min(1).max(400000),
@@ -11,13 +13,42 @@ export const dropSchema = z
     (value) => value.maxViews === undefined || value.expiration === "burn",
     { message: "View limits require view-based expiration." },
   );
+
+export const usernameSchema = z
+  .string()
+  .min(3, "Username must be at least 3 characters.")
+  .max(30, "Username must be at most 30 characters.")
+  .regex(
+    /^[a-zA-Z0-9_-]+$/,
+    "Username can only contain letters, numbers, underscores, and hyphens.",
+  );
+
 export const authSchema = z.object({
   email: z
-    .email()
+    .string()
+    .email("Invalid email address")
     .max(254)
     .transform((v) => v.toLowerCase().trim()),
-  password: z.string().min(12).max(128),
+  password: z.string().min(12, "Password must be at least 12 characters.").max(128),
+  username: usernameSchema.optional(),
 });
+
+export const updateAccountSchema = z.object({
+  username: usernameSchema.optional(),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .max(254)
+    .transform((v) => v.toLowerCase().trim())
+    .optional(),
+  currentPassword: z.string().optional(),
+  newPassword: z
+    .string()
+    .min(12, "Password must be at least 12 characters.")
+    .max(128)
+    .optional(),
+});
+
 export function dropPolicy(
   content: string,
   expiration: string,

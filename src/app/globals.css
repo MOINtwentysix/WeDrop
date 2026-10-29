@@ -828,6 +828,80 @@ input:not([type="checkbox"]) {
   white-space: nowrap;
   border: 0;
 }
+.hero-buttons {
+  margin-top: 28px;
+}
+.preview-code {
+  margin: 0;
+  padding: 3px 5px;
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #374030;
+  white-space: pre-wrap;
+}
+.preview-settings {
+  justify-content: space-between;
+}
+.preview-badges {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 11px;
+  color: #697d4c;
+}
+.preview-badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.feature-grid-landing {
+  margin-top: 48px;
+}
+.self-host-card {
+  max-width: 680px;
+  margin: 40px auto 60px;
+  padding: 32px;
+  background: #fbfcf8;
+  border-color: #dce1d5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.self-host-info {
+  flex: 1;
+  min-width: 260px;
+}
+.self-host-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #6c814d;
+  margin-bottom: 8px;
+}
+.self-host-title {
+  font-size: 22px;
+  margin: 0 0 8px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+.self-host-desc {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.self-host-btn {
+  padding: 12px 18px;
+  font-size: 12px;
+  gap: 8px;
+  white-space: nowrap;
+}
 @media (min-width: 1400px) {
   .hero {
     padding-top: 75px;
