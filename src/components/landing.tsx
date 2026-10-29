@@ -32,7 +32,7 @@ export function LandingPage() {
     "https://github.com/search?q=wedrop&type=repositories";
 
   const codePreviewText =
-    '// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: "24h", // or burn after reading\n  passwordProtected: true,\n};';
+    "// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: \"24h\", // or burn after reading\n  passwordProtected: true,\n};";
 
   return (
     <div className="landing-page">
@@ -50,7 +50,7 @@ export function LandingPage() {
           <br />
           Give it a link. Send it on. Let it disappear.
         </p>
-        <div className="button-row" style={{ marginTop: "28px" }}>
+        <div className="button-row hero-buttons">
           <Link className="primary" href="/create">
             Create a drop <ArrowUpRight size={18} />
           </Link>
@@ -78,26 +78,16 @@ export function LandingPage() {
           <span className="line-number" aria-hidden="true">
             01
           </span>
-          <pre
-            style={{
-              margin: 0,
-              padding: "3px 5px",
-              fontFamily: 'Consolas, "Liberation Mono", monospace',
-              fontSize: "12px",
-              lineHeight: 1.9,
-              color: "#374030",
-              whiteSpace: "pre-wrap",
-            }}
-          >
+          <pre className="preview-code">
             {codePreviewText}
           </pre>
         </div>
-        <div className="composer-settings" style={{ justifyContent: "space-between" }}>
-          <div style={{ display: "flex", gap: "16px", alignItems: "center", fontSize: "11px", color: "#697d4c" }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+        <div className="composer-settings preview-settings">
+          <div className="preview-badges">
+            <span className="preview-badge-item">
               <Clock3 size={15} /> 24 Hours or Burn
             </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+            <span className="preview-badge-item">
               <LockKeyhole size={14} /> Password Protection
             </span>
           </div>
@@ -123,7 +113,7 @@ export function LandingPage() {
       </div>
 
       {/* Modern Features Grid */}
-      <section className="feature-grid" aria-label="Why WeDrop" style={{ marginTop: "48px" }}>
+      <section className="feature-grid feature-grid-landing" aria-label="Why WeDrop">
         <div>
           <span className="feature-icon">
             <Zap size={19} />
@@ -160,50 +150,23 @@ export function LandingPage() {
       </section>
 
       {/* Self-Hosting Card */}
-      <section
-        className="form-card"
-        style={{
-          maxWidth: "680px",
-          margin: "40px auto 60px",
-          padding: "32px",
-          background: "#fbfcf8",
-          borderColor: "#dce1d5",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justify-content: "space-between",
-          gap: "24px",
-          flexWrap: "wrap",
-        }}
-      >
-        <div style={{ flex: 1, minWidth: "260px" }}>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              fontSize: "10px",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-              color: "#6c814d",
-              marginBottom: "8px",
-            }}
-          >
+      <section className="form-card self-host-card">
+        <div className="self-host-info">
+          <span className="self-host-eyebrow">
             <Server size={14} /> SELF-HOSTABLE &amp; OPEN SOURCE
           </span>
-          <h2 style={{ fontSize: "22px", margin: "0 0 8px", fontWeight: 600, letterSpacing: "-0.5px" }}>
+          <h2 className="self-host-title">
             Run WeDrop on your own server.
           </h2>
-          <p className="subtle" style={{ margin: 0, fontSize: "12px", lineHeight: 1.6 }}>
+          <p className="subtle self-host-desc">
             Take 100% control of your data. WeDrop is licensed under AGPLv3 and can be easily deployed with Next.js and Neon Postgres or any PostgreSQL database.
           </p>
         </div>
         <a
-          className="secondary"
+          className="secondary self-host-btn"
           href={sourceUrl}
           target="_blank"
           rel="noreferrer"
-          style={{ padding: "12px 18px", fontSize: "12px", gap: "8px", whiteSpace: "nowrap" }}
         >
           <Github size={16} /> View on GitHub <ArrowUpRight size={14} />
         </a>
