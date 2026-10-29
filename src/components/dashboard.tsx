@@ -13,6 +13,7 @@ import {
 import { useAuth } from "./app-shell";
 import { ShareCard } from "./share-card";
 import { api, remaining } from "@/lib/client";
+
 type Drop = {
   id: string;
   created_at: string;
@@ -21,6 +22,7 @@ type Drop = {
   protected: boolean;
   remaining_views: number | null;
 };
+
 export function Dashboard() {
   const { user, loading } = useAuth();
   const [drops, setDrops] = useState<Drop[]>([]);
@@ -32,6 +34,7 @@ export function Dashboard() {
   const [busy, setBusy] = useState(false);
   const [, tick] = useState(0);
   const dialog = useRef<HTMLDivElement>(null);
+
   async function load(before?: string) {
     setBusy(true);
     setError("");
@@ -50,13 +53,16 @@ export function Dashboard() {
       setBusy(false);
     }
   }
+
   useEffect(() => {
     if (user) load();
   }, [user]);
+
   useEffect(() => {
     const timer = setInterval(() => tick((n) => n + 1), 10000);
     return () => clearInterval(timer);
   }, []);
+
   useEffect(() => {
     if (!selected) return;
     const previous = document.activeElement as HTMLElement | null;
@@ -87,12 +93,14 @@ export function Dashboard() {
       previous?.focus();
     };
   }, [selected]);
+
   if (loading)
     return (
       <section className="narrow">
         <p>Loading your account…</p>
       </section>
     );
+
   if (!user)
     return (
       <section className="narrow center">
@@ -107,7 +115,9 @@ export function Dashboard() {
         </Link>
       </section>
     );
+
   const active = drops.filter((d) => Date.parse(d.expires_at) > Date.now());
+
   return (
     <section className="dashboard">
       <div className="dashboard-heading">
@@ -118,7 +128,7 @@ export function Dashboard() {
           </h1>
           <p className="intro">Here for now. Yours to manage.</p>
         </div>
-        <Link className="primary" href="/">
+        <Link className="primary" href="/create">
           <Plus size={17} />
           New drop
         </Link>
@@ -137,7 +147,7 @@ export function Dashboard() {
           <span className="empty-symbol">↓</span>
           <h2>A clean slate.</h2>
           <p>Your active drops will appear here.</p>
-          <Link className="text-button" href="/">
+          <Link className="text-button" href="/create">
             Create your first drop <ArrowUpRight size={16} />
           </Link>
         </div>

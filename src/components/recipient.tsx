@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Flame, LockKeyhole, Copy, ArrowUpRight } from "lucide-react";
 import { api } from "@/lib/client";
+
 type Meta = {
   protected: boolean;
   burn_after_reading: boolean;
   expires_at: string;
   remaining_views: number | null;
 };
+
 export function Recipient({ id }: { id: string }) {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [content, setContent] = useState<string | null>(null);
@@ -17,6 +19,7 @@ export function Recipient({ id }: { id: string }) {
   const [missing, setMissing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState("");
+
   useEffect(() => {
     let active = true;
     api(`/api/drops/${id}`)
@@ -39,17 +42,19 @@ export function Recipient({ id }: { id: string }) {
       window.removeEventListener("pagehide", clear);
     };
   }, [id]);
+
   if (missing)
     return (
       <section className="narrow center">
         <span className="empty-symbol">↗</span>
         <h1>Here for a moment.</h1>
         <p className="intro">This drop has expired or was burned.</p>
-        <Link className="primary" href="/">
+        <Link className="primary" href="/create">
           Create a new drop <ArrowUpRight size={16} />
         </Link>
       </section>
     );
+
   if (!meta)
     return (
       <section className="narrow center">
@@ -61,6 +66,7 @@ export function Recipient({ id }: { id: string }) {
         )}
       </section>
     );
+
   return (
     <section className={content === null ? "narrow" : "recipient-section"}>
       <span className="eyebrow">SOMETHING SHARED WITH YOU</span>

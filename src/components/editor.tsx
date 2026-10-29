@@ -9,13 +9,13 @@ import {
   Flame,
   LockKeyhole,
   ShieldCheck,
-  Zap,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "./app-shell";
 import { ShareCard } from "./share-card";
 import { api } from "@/lib/client";
+
 const options = [
   { value: "30m", label: "30 Minutes", detail: "Just passing through" },
   {
@@ -43,6 +43,7 @@ const options = [
     account: true,
   },
 ];
+
 export function Editor() {
   const textarea = useRef<HTMLTextAreaElement>(null);
   const { user, loading } = useAuth();
@@ -60,11 +61,13 @@ export function Editor() {
     burn_after_reading: boolean;
     remaining_views: number | null;
   } | null>(null);
+
   useEffect(() => {
     if (!textarea.current) return;
     textarea.current.style.height = "auto";
     textarea.current.style.height = `${Math.min(520, textarea.current.scrollHeight)}px`;
   }, [content, created]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const text = [params.get("title"), params.get("text"), params.get("url")]
@@ -72,11 +75,13 @@ export function Editor() {
       .join("\n\n");
     if (text) {
       setContent(text);
-      history.replaceState(null, "", "/");
+      history.replaceState(null, "", window.location.pathname);
     }
   }, []);
+
   const max = user ? 200000 : 50000;
   const count = Array.from(content).length;
+
   if (created)
     return (
       <section className="result-section">
@@ -114,13 +119,10 @@ export function Editor() {
         </button>
       </section>
     );
+
   return (
     <>
       <section className="hero">
-        <div className="pill">
-          <span />
-          LESS FRICTION. MORE CONNECTION.
-        </div>
         <h1>
           Drop it.
           <br />
@@ -141,7 +143,6 @@ export function Editor() {
             <Code2 size={16} />
             Your next little drop
           </span>
-          <span className="plain-badge">PLAIN TEXT / CODE</span>
         </div>
         <form
           onSubmit={async (e) => {
@@ -338,41 +339,6 @@ export function Editor() {
           </span>
         )}
       </div>
-      <section className="feature-grid" aria-label="Why WeDrop">
-        <div>
-          <span className="feature-icon">
-            <Zap size={19} />
-          </span>
-          <h3>From here to anywhere.</h3>
-          <p>
-            No attachments, no extra steps.
-            <br />
-            Just your words and a link.
-          </p>
-        </div>
-        <div>
-          <span className="feature-icon">
-            <Clock3 size={19} />
-          </span>
-          <h3>A moment, not forever.</h3>
-          <p>
-            Choose when it disappears.
-            <br />
-            We’ll take care of the goodbye.
-          </p>
-        </div>
-        <div>
-          <span className="feature-icon">
-            <Code2 size={19} />
-          </span>
-          <h3>Made for the little things.</h3>
-          <p>
-            Code snippets, quick notes,
-            <br />
-            and everything in between.
-          </p>
-        </div>
-      </section>
     </>
   );
 }

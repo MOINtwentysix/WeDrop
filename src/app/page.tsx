@@ -1,4 +1,5 @@
-import { Editor } from "@/components/editor";
+import { LandingPage } from "@/components/landing";
+
 export default function Home() {
-  return <Editor />;
+  return <LandingPage />;
 }

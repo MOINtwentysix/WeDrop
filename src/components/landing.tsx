@@ -1,0 +1,154 @@
+"use client";
+
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  ArrowUpRight,
+  Clock3,
+  Code2,
+  Flame,
+  LockKeyhole,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
+import { useAuth } from "./app-shell";
+
+export function LandingPage() {
+  const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("title") || params.has("text") || params.has("url")) {
+      router.replace(`/create?${params.toString()}`);
+    }
+  }, [router]);
+
+  return (
+    <div className="landing-page">
+      <section className="hero">
+        <h1>
+          Drop it.
+          <br />
+          <span>Share it.</span>
+          <span className="hero-asterisk" aria-hidden="true">
+            ✳
+          </span>
+        </h1>
+        <p>
+          A thought, a snippet, a little something.
+          <br />
+          Give it a link. Send it on. Let it disappear.
+        </p>
+        <div className="button-row" style={{ marginTop: "28px" }}>
+          <Link className="primary" href="/create">
+            Create a drop <ArrowUpRight size={18} />
+          </Link>
+          {user ? (
+            <Link className="secondary" href="/my-drops">
+              My Drops
+            </Link>
+          ) : (
+            <Link className="secondary" href="/login">
+              Sign in
+            </Link>
+          )}
+        </div>
+      </section>
+
+      {/* Product Preview Card (Read-only showcase, no drop creation form) */}
+      <section className="composer landing-preview" aria-label="Drop Preview Showcase">
+        <div className="editor-top">
+          <span>
+            <Code2 size={16} />
+            Your next little drop
+          </span>
+        </div>
+        <div className="editor-area">
+          <span className="line-number" aria-hidden="true">
+            01
+          </span>
+          <pre
+            style={{
+              margin: 0,
+              padding: "3px 5px",
+              fontFamily: 'Consolas, "Liberation Mono", monospace',
+              fontSize: "12px",
+              lineHeight: 1.9,
+              color: "#374030",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {`// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: "24h", // or burn after reading\n  passwordProtected: true,\n};`}
+          </pre>
+        </div>
+        <div className="composer-settings" style={{ justifyContent: "space-between" }}>
+          <div style={{ display: "flex", gap: "16px", alignItems: "center", fontSize: "11px", color: "#697d4c" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+              <Clock3 size={15} /> 24 Hours or Burn
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+              <LockKeyhole size={14} /> Password Protection
+            </span>
+          </div>
+          <Link className="primary create-button" href="/create">
+            Open Editor <ArrowUpRight size={18} />
+          </Link>
+        </div>
+      </section>
+
+      <div className="under-editor">
+        <span>
+          <ShieldCheck size={14} />
+          Ephemeral by design.
+        </span>
+        {!user && (
+          <span>
+            Need more room?{" "}
+            <Link href="/register">
+              Create a free account <ArrowUpRight size={12} />
+            </Link>
+          </span>
+        )}
+      </div>
+
+      {/* Modern Features Grid */}
+      <section className="feature-grid" aria-label="Why WeDrop" style={{ marginTop: "48px" }}>
+        <div>
+          <span className="feature-icon">
+            <Zap size={19} />
+          </span>
+          <h3>Instant & Simple</h3>
+          <p>
+            No attachments, no setup required.
+            <br />
+            Just paste your text and share a clean link.
+          </p>
+        </div>
+        <div>
+          <span className="feature-icon">
+            <Flame size={19} />
+          </span>
+          <h3>Ephemeral & Private</h3>
+          <p>
+            Set links to expire after time or single opens.
+            <br />
+            Once expired, it’s deleted forever.
+          </p>
+        </div>
+        <div>
+          <span className="feature-icon">
+            <LockKeyhole size={19} />
+          </span>
+          <h3>Optional Password</h3>
+          <p>
+            Add password protection to sensitive drops
+            <br />
+            for extra peace of mind.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
