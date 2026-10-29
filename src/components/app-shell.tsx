@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, createContext, useContext } from "react";
 import {
   ArrowDown,
@@ -23,6 +24,8 @@ const Auth = createContext<{
 export const useAuth = () => useContext(Auth);
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isEditor = pathname === "/create" || pathname === "/editor";
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [install, setInstall] = useState<InstallPrompt | null>(null);
@@ -59,7 +62,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <Auth.Provider value={{ user, loading, refresh }}>
-      <div className="site">
+      <div className={`site${isEditor ? " site-editor" : ""}`}>
         <header className="header">
           <Link href="/" className="brand" aria-label="WeDrop home">
             <span className="brand-icon">

@@ -64,12 +64,6 @@ export function Editor() {
   } | null>(null);
 
   useEffect(() => {
-    if (!textarea.current) return;
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = `${Math.max(188, textarea.current.scrollHeight)}px`;
-  }, [content, created]);
-
-  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const text = [params.get("title"), params.get("text"), params.get("url")]
       .filter(Boolean)
@@ -123,8 +117,8 @@ export function Editor() {
     );
 
   return (
-    <>
-      <section className="composer" aria-label="Create a drop">
+    <div className="editor-page-wrapper">
+      <section className="composer editor-fullscreen" aria-label="Create a drop">
         <div className="editor-top">
           <span>
             <Code2 size={16} />
@@ -133,6 +127,7 @@ export function Editor() {
         </div>
 
         <form
+          className="editor-form"
           onSubmit={async (e) => {
             e.preventDefault();
             setBusy(true);
@@ -332,6 +327,6 @@ export function Editor() {
           </span>
         )}
       </div>
-    </>
+    </div>
   );
 }
