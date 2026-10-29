@@ -31,6 +31,9 @@ export function LandingPage() {
     process.env.NEXT_PUBLIC_SOURCE_URL ||
     "https://github.com/search?q=wedrop&type=repositories";
 
+  const codePreviewText =
+    '// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: "24h", // or burn after reading\n  passwordProtected: true,\n};';
+
   return (
     <div className="landing-page">
       <section className="hero">
@@ -86,7 +89,7 @@ export function LandingPage() {
               whiteSpace: "pre-wrap",
             }}
           >
-            {`// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: "24h", // or burn after reading\n  passwordProtected: true,\n};`}
+            {codePreviewText}
           </pre>
         </div>
         <div className="composer-settings" style={{ justifyContent: "space-between" }}>
@@ -125,7 +128,7 @@ export function LandingPage() {
           <span className="feature-icon">
             <Zap size={19} />
           </span>
-          <h3>Instant & Simple</h3>
+          <h3>Instant &amp; Simple</h3>
           <p>
             No attachments, no setup required.
             <br />
@@ -136,7 +139,7 @@ export function LandingPage() {
           <span className="feature-icon">
             <Flame size={19} />
           </span>
-          <h3>Ephemeral & Private</h3>
+          <h3>Ephemeral &amp; Private</h3>
           <p>
             Set links to expire after time or single opens.
             <br />
@@ -186,7 +189,7 @@ export function LandingPage() {
               marginBottom: "8px",
             }}
           >
-            <Server size={14} /> SELF-HOSTABLE & OPEN SOURCE
+            <Server size={14} /> SELF-HOSTABLE &amp; OPEN SOURCE
           </span>
           <h2 style={{ fontSize: "22px", margin: "0 0 8px", fontWeight: 600, letterSpacing: "-0.5px" }}>
             Run WeDrop on your own server.
