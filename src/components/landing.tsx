@@ -12,6 +12,9 @@ import {
   LockKeyhole,
   Server,
   ShieldCheck,
+  CheckCircle2,
+  KeyRound,
+  FileCode2,
   Zap,
 } from "lucide-react";
 import { useAuth } from "./app-shell";
@@ -36,6 +39,7 @@ export function LandingPage() {
 
   return (
     <div className="landing-page">
+      {/* Hero Section */}
       <section className="hero">
         <h1>
           Drop it.
@@ -66,7 +70,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Product Preview Card (Read-only showcase, no drop creation form) */}
+      {/* Product Preview Card (Showcase) */}
       <section className="composer landing-preview" aria-label="Drop Preview Showcase">
         <div className="editor-top">
           <span>
@@ -112,40 +116,73 @@ export function LandingPage() {
         )}
       </div>
 
-      {/* Modern Features Grid */}
-      <section className="feature-grid feature-grid-landing" aria-label="Why WeDrop">
-        <div>
-          <span className="feature-icon">
-            <Zap size={19} />
-          </span>
-          <h3>Instant &amp; Simple</h3>
-          <p>
-            No attachments, no setup required.
-            <br />
-            Just paste your text and share a clean link.
-          </p>
+      {/* How WeDrop Works Section */}
+      <section className="landing-section" style={{ marginTop: "64px" }}>
+        <span className="eyebrow">SIMPLE 3-STEP PROCESS</span>
+        <h2 style={{ fontSize: "28px", fontWeight: 500, letterSpacing: "-1px", margin: "12px 0 32px" }}>
+          How WeDrop Works
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
+          <div className="form-card" style={{ padding: "24px" }}>
+            <span style={{ fontSize: "24px", fontWeight: "bold", color: "#80944f" }}>01</span>
+            <h3 style={{ fontSize: "16px", margin: "8px 0" }}>Write or Paste</h3>
+            <p className="subtle" style={{ margin: 0, fontSize: "12px" }}>
+              Paste code snippets, plain text, credentials, or quick thoughts into the editor.
+            </p>
+          </div>
+          <div className="form-card" style={{ padding: "24px" }}>
+            <span style={{ fontSize: "24px", fontWeight: "bold", color: "#80944f" }}>02</span>
+            <h3 style={{ fontSize: "16px", margin: "8px 0" }}>Set Expiration</h3>
+            <p className="subtle" style={{ margin: 0, fontSize: "12px" }}>
+              Choose a time window (30m to 7d) or set a view limit ("Burn after reading").
+            </p>
+          </div>
+          <div className="form-card" style={{ padding: "24px" }}>
+            <span style={{ fontSize: "24px", fontWeight: "bold", color: "#80944f" }}>03</span>
+            <h3 style={{ fontSize: "16px", margin: "8px 0" }}>Share &amp; Disappear</h3>
+            <p className="subtle" style={{ margin: 0, fontSize: "12px" }}>
+              Send your generated link or QR code. Once read or expired, it’s deleted permanently.
+            </p>
+          </div>
         </div>
-        <div>
-          <span className="feature-icon">
-            <Flame size={19} />
-          </span>
-          <h3>Ephemeral &amp; Private</h3>
-          <p>
-            Set links to expire after time or single opens.
-            <br />
-            Once expired, it’s deleted forever.
-          </p>
-        </div>
-        <div>
-          <span className="feature-icon">
-            <LockKeyhole size={19} />
-          </span>
-          <h3>Optional Password</h3>
-          <p>
-            Add password protection to sensitive drops
-            <br />
-            for extra peace of mind.
-          </p>
+      </section>
+
+      {/* Security & Use Cases Grid */}
+      <section className="landing-section" style={{ marginTop: "56px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "28px" }}>
+          {/* Security Box */}
+          <div className="form-card" style={{ padding: "28px" }}>
+            <span className="eyebrow" style={{ color: "#6c814d" }}>SECURITY FIRST</span>
+            <h3 style={{ fontSize: "20px", margin: "8px 0 16px" }}>Built for Privacy &amp; Peace of Mind</h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px", fontSize: "13px", color: "#475245" }}>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <CheckCircle2 size={16} color="#6c814d" /> Atomic SQL deletion on final view or expiry
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <CheckCircle2 size={16} color="#6c814d" /> Scrypt password hashing for protected drops
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <CheckCircle2 size={16} color="#6c814d" /> Zero analytics, tracking, or file upload risks
+              </li>
+            </ul>
+          </div>
+
+          {/* Use Cases Box */}
+          <div className="form-card" style={{ padding: "28px" }}>
+            <span className="eyebrow" style={{ color: "#6c814d" }}>VERSATILE SHARING</span>
+            <h3 style={{ fontSize: "20px", margin: "8px 0 16px" }}>Made for Everyday Workflows</h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px", fontSize: "13px", color: "#475245" }}>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <KeyRound size={16} color="#6c814d" /> Pass API keys, tokens &amp; credentials safely
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <FileCode2 size={16} color="#6c814d" /> Share quick code snippets &amp; debug logs
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <Zap size={16} color="#6c814d" /> Send temporary notes across devices instantly
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 

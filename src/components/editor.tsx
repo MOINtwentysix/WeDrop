@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
@@ -63,12 +64,6 @@ export function Editor() {
   } | null>(null);
 
   useEffect(() => {
-    if (!textarea.current) return;
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = `${Math.min(520, textarea.current.scrollHeight)}px`;
-  }, [content, created]);
-
-  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const text = [params.get("title"), params.get("text"), params.get("url")]
       .filter(Boolean)
@@ -81,6 +76,7 @@ export function Editor() {
 
   const max = user ? 200000 : 50000;
   const count = Array.from(content).length;
+  const lines = content.split("\n").length;
 
   if (created)
     return (
@@ -122,28 +118,18 @@ export function Editor() {
 
   return (
     <>
-      <section className="hero">
-        <h1>
-          Drop it.
-          <br />
-          <span>Share it.</span>
-          <span className="hero-asterisk" aria-hidden="true">
-            ✳
-          </span>
-        </h1>
-        <p>
-          A thought, a snippet, a little something.
-          <br />
-          Give it a link. Send it on. Let it disappear.
-        </p>
-      </section>
-      <section className="composer" aria-label="Create a drop">
+      <section className="pro-composer" aria-label="Create a drop">
         <div className="editor-top">
           <span>
             <Code2 size={16} />
-            Your next little drop
+            <strong>WeDrop Pro Editor</strong>
           </span>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", fontSize: "10px", color: "#788078" }}>
+            <span className="pro-badge">PRO MODE</span>
+            <span>{lines} {lines === 1 ? "line" : "lines"}</span>
+          </div>
         </div>
+
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -169,10 +155,12 @@ export function Editor() {
             }
           }}
         >
-          <div className="editor-area">
-            <span className="line-number" aria-hidden="true">
-              01
-            </span>
+          <div className="pro-editor-area">
+            <div className="line-number" aria-hidden="true" style={{ textAlign: "right", userSelect: "none" }}>
+              {Array.from({ length: Math.max(lines, 12) }, (_, i) => (
+                <div key={i}>{String(i + 1).padStart(2, "0")}</div>
+              ))}
+            </div>
             <label className="sr-only" htmlFor="content">
               Your text or code
             </label>
@@ -187,6 +175,7 @@ export function Editor() {
               }
             />
           </div>
+
           <div className="editor-bottom">
             <span className={count > max ? "over-limit" : ""}>
               {count.toLocaleString("en-US")} / {max.toLocaleString("en-US")}{" "}
@@ -201,6 +190,7 @@ export function Editor() {
               Clear <X size={12} />
             </button>
           </div>
+
           <div className="composer-settings">
             <div className="expiry-control">
               <span className="field-label">WHEN SHOULD IT DISAPPEAR?</span>
@@ -285,6 +275,7 @@ export function Editor() {
                 </small>
               )}
             </div>
+
             <div className="password-control">
               <label className="check-label">
                 <input
@@ -309,6 +300,7 @@ export function Editor() {
                 />
               )}
             </div>
+
             <button
               className="primary create-button"
               type="submit"
@@ -325,6 +317,7 @@ export function Editor() {
           )}
         </form>
       </section>
+
       <div className="under-editor">
         <span>
           <ShieldCheck size={14} />
