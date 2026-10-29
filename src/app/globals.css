@@ -831,6 +831,11 @@ input:not([type="checkbox"]) {
 .hero-buttons {
   margin-top: 28px;
 }
+.hero-buttons .secondary {
+  padding: 13px 18px;
+  font-size: 12px;
+  font-weight: 500;
+}
 .preview-code {
   margin: 0;
   padding: 3px 5px;

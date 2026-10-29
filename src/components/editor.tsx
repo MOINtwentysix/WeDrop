@@ -64,6 +64,12 @@ export function Editor() {
   } | null>(null);
 
   useEffect(() => {
+    if (!textarea.current) return;
+    textarea.current.style.height = "auto";
+    textarea.current.style.height = `${Math.max(188, textarea.current.scrollHeight)}px`;
+  }, [content, created]);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const text = [params.get("title"), params.get("text"), params.get("url")]
       .filter(Boolean)
@@ -118,16 +124,13 @@ export function Editor() {
 
   return (
     <>
-      <section className="pro-composer" aria-label="Create a drop">
+      <section className="composer" aria-label="Create a drop">
         <div className="editor-top">
           <span>
             <Code2 size={16} />
-            <strong>WeDrop Pro Editor</strong>
+            Your next little drop
           </span>
-          <div style={{ display: "flex", gap: "12px", alignItems: "center", fontSize: "10px", color: "#788078" }}>
-            <span className="pro-badge">PRO MODE</span>
-            <span>{lines} {lines === 1 ? "line" : "lines"}</span>
-          </div>
+          <span className="plain-badge">PLAIN TEXT / CODE</span>
         </div>
 
         <form
@@ -155,12 +158,10 @@ export function Editor() {
             }
           }}
         >
-          <div className="pro-editor-area">
-            <div className="line-number" aria-hidden="true" style={{ textAlign: "right", userSelect: "none" }}>
-              {Array.from({ length: Math.max(lines, 12) }, (_, i) => (
-                <div key={i}>{String(i + 1).padStart(2, "0")}</div>
-              ))}
-            </div>
+          <div className="editor-area">
+            <span className="line-number" aria-hidden="true">
+              01
+            </span>
             <label className="sr-only" htmlFor="content">
               Your text or code
             </label>

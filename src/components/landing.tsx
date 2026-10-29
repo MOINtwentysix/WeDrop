@@ -35,7 +35,7 @@ export function LandingPage() {
     "https://github.com/search?q=wedrop&type=repositories";
 
   const codePreviewText =
-    "// Paste code, share notes, send ideas instantly\nconst drop = {\n  ephemeral: true,\n  expiration: \"24h\", // or burn after reading\n  passwordProtected: true,\n};";
+    "Hey Alex, here are the Wi-Fi credentials for the conference room:\n\nNetwork: Guest_Access_5G\nPassword: sunset-coffee-4291\n\nThis note will self-destruct once viewed.";
 
   return (
     <div className="landing-page">
