@@ -8,7 +8,9 @@ import {
   Clock3,
   Code2,
   Flame,
+  Github,
   LockKeyhole,
+  Server,
   ShieldCheck,
   Zap,
 } from "lucide-react";
@@ -24,6 +26,10 @@ export function LandingPage() {
       router.replace(`/create?${params.toString()}`);
     }
   }, [router]);
+
+  const sourceUrl =
+    process.env.NEXT_PUBLIC_SOURCE_URL ||
+    "https://github.com/search?q=wedrop&type=repositories";
 
   return (
     <div className="landing-page">
@@ -148,6 +154,56 @@ export function LandingPage() {
             for extra peace of mind.
           </p>
         </div>
+      </section>
+
+      {/* Self-Hosting Card */}
+      <section
+        className="form-card"
+        style={{
+          maxWidth: "680px",
+          margin: "40px auto 60px",
+          padding: "32px",
+          background: "#fbfcf8",
+          borderColor: "#dce1d5",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justify-content: "space-between",
+          gap: "24px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "10px",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+              color: "#6c814d",
+              marginBottom: "8px",
+            }}
+          >
+            <Server size={14} /> SELF-HOSTABLE & OPEN SOURCE
+          </span>
+          <h2 style={{ fontSize: "22px", margin: "0 0 8px", fontWeight: 600, letterSpacing: "-0.5px" }}>
+            Run WeDrop on your own server.
+          </h2>
+          <p className="subtle" style={{ margin: 0, fontSize: "12px", lineHeight: 1.6 }}>
+            Take 100% control of your data. WeDrop is licensed under AGPLv3 and can be easily deployed with Next.js and Neon Postgres or any PostgreSQL database.
+          </p>
+        </div>
+        <a
+          className="secondary"
+          href={sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          style={{ padding: "12px 18px", fontSize: "12px", gap: "8px", whiteSpace: "nowrap" }}
+        >
+          <Github size={16} /> View on GitHub <ArrowUpRight size={14} />
+        </a>
       </section>
     </div>
   );

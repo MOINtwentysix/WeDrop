@@ -7,11 +7,11 @@ import {
   Github,
   LogOut,
   Download,
-  Plus,
+  User as UserIcon,
 } from "lucide-react";
 import { api } from "@/lib/client";
 
-type User = { id: string; email: string };
+type User = { id: string; email: string; username?: string | null };
 type InstallPrompt = Event & { prompt: () => Promise<void> };
 
 const Auth = createContext<{
@@ -70,6 +70,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <nav aria-label="Main navigation">
             <Link href="/create">Create Drop</Link>
             <Link href="/my-drops">My Drops</Link>
+            {user && (
+              <Link href="/account" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                <UserIcon size={14} />
+                {user.username ? `@${user.username}` : "Account"}
+              </Link>
+            )}
             {install && (
               <button
                 className="nav-button"

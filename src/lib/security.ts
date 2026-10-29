@@ -8,18 +8,22 @@ import { promisify } from "node:util";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { db } from "./db";
+
 const scrypt = promisify(scryptCallback);
+
 export function secret() {
   const value = process.env.JWT_SECRET;
   if (!value || value.length < 32)
     throw new Error("JWT_SECRET must contain at least 32 characters.");
   return value;
 }
+
 export async function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
   const hash = (await scrypt(password, salt, 64)) as Buffer;
   return `scrypt:${salt}:${hash.toString("hex")}`;
 }
+
 export async function verifyPassword(password: string, stored: string) {
   const [algorithm, salt, hex] = stored.split(":");
   if (algorithm !== "scrypt" || !salt || !hex) return false;
@@ -27,6 +31,7 @@ export async function verifyPassword(password: string, stored: string) {
   const expected = Buffer.from(hex, "hex");
   return expected.length === hash.length && timingSafeEqual(hash, expected);
 }
+
 export async function setSession(id: string) {
   const token = await new SignJWT({})
     .setProtectedHeader({ alg: "HS256" })
@@ -44,6 +49,7 @@ export async function setSession(id: string) {
     maxAge: 604800,
   });
 }
+
 export async function session() {
   const token = (await cookies()).get("wedrop_session")?.value;
   if (!token) return null;
@@ -59,15 +65,17 @@ export async function session() {
     return null;
   }
   if (!id) return null;
-  const rows = await db()`SELECT id, email FROM users WHERE id = ${id}`;
-  return (rows[0] as { id: string; email: string } | undefined) ?? null;
+  const rows = await db()`SELECT id, email, username FROM users WHERE id = ${id}`;
+  return (rows[0] as { id: string; email: string; username: string | null } | undefined) ?? null;
 }
+
 export function sameOrigin(request: Request) {
   const expected = new URL(process.env.NEXT_PUBLIC_APP_URL || request.url)
     .origin;
   if (request.headers.get("origin") !== expected)
     throw new HttpError(403, "This request is not allowed.");
 }
+
 export class HttpError extends Error {
   constructor(
     public status: number,
@@ -76,6 +84,7 @@ export class HttpError extends Error {
     super(message);
   }
 }
+
 export async function limit(
   request: Request,
   scope: string,
